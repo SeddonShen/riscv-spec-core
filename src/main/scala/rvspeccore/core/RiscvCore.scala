@@ -81,11 +81,13 @@ class RiscvCore()(implicit config: RVConfig) extends BaseCore with RVInstSet {
     config match {
       case RV32Config(_) => {
         doRV32I
+        if (config.A) { doRV32A }
         if (config.M) { doRV32M }
         if (config.C) { doRV32C }
       }
       case RV64Config(_) => {
         doRV64I
+        if (config.A) { doRV64A }
         if (config.M) { doRV64M }
         if (config.C) { doRV64C }
       }
