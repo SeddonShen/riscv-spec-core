@@ -15,11 +15,12 @@ sealed abstract class RVConfig(extensions: String) {
   val C: Boolean = extensions.indexOf("C") != -1
   val S: Boolean = extensions.indexOf("S") != -1
   val U: Boolean = extensions.indexOf("U") != -1
+  val A: Boolean = extensions.indexOf("A") != -1
   // CSRs Config
 
   // Misa
   // var CSRMisaExtList = List('A', 'S', 'I', 'U')
-  var CSRMisaExtList = List('A', 'S', 'I')
+  var CSRMisaExtList = List('S', 'I')
   if(M){ CSRMisaExtList = CSRMisaExtList :+ 'M'}
   if(C){ CSRMisaExtList = CSRMisaExtList :+ 'C'}
   if(S){ 
@@ -27,7 +28,7 @@ sealed abstract class RVConfig(extensions: String) {
     if(!U){ CSRMisaExtList = CSRMisaExtList :+ 'U'} 
   }
   if(U){ CSRMisaExtList = CSRMisaExtList :+ 'U'} 
-
+  if(A){ CSRMisaExtList = CSRMisaExtList :+ 'A'} 
 }
 
 case class RV32Config(extensions: String = "") extends RVConfig(extensions) {

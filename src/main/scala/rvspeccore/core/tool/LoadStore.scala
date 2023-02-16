@@ -48,6 +48,7 @@ trait LoadStore extends BaseCore with MMU{
     val pv = Mux(mstatusStruct.mprv.asBool, mstatusStruct.mpp, priviledgeMode)
     val vmEnable = now.csr.satp.asTypeOf(new SatpStruct).mode === 8.U && (pv < 0x3.U)
     printf("[Debug]Write addr:%x, priviledgeMode:%x %x %x %x vm:%x\n", addr, pv, mstatusStruct.mprv.asBool, mstatusStruct.mpp, priviledgeMode, vmEnable)
+    printf("[Debug]Write data:%x, Width:%x\n", data, memWidth)
     mem.write.valid    := true.B
     when(vmEnable){
         // FIXME: addr 的虚实地址均并非64位 需进一步加以限制

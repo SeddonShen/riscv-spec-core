@@ -8,6 +8,7 @@ trait RVInstSet
     with IBase
     with MExtension
     with CExtension
+    with AExtension
     with ZifenceiExtension
     with ZicsrExtension
     with csr.CSRSupport
