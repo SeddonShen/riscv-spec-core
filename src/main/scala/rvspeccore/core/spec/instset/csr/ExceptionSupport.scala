@@ -154,10 +154,10 @@ trait ExceptionSupport extends BaseCore {
     // FIXME: 目前仅仅考虑了异常
     val deleg = now.csr.medeleg
     val delegS = (deleg(exceptionNO)) && (priviledgeMode < ModeM)
-    printf("[Error]Exception:%d Deleg[hex]:%x DelegS[hex]:%x Mode:%x \n",exceptionNO, deleg, delegS, priviledgeMode)
-    printf("[Debug] mstatus:%x %x\n", now.csr.mstatus, next.csr.mstatus)
-    printf("[Debug] mepc:%x %x\n", now.csr.mepc, next.csr.mepc)
-    printf("[Debug] mcause:%x %x Mode:%x\n", now.csr.mcause, next.csr.mcause, priviledgeMode)
+    // printf("[Error]Exception:%d Deleg[hex]:%x DelegS[hex]:%x Mode:%x \n",exceptionNO, deleg, delegS, priviledgeMode)
+    // printf("[Debug] mstatus:%x %x\n", now.csr.mstatus, next.csr.mstatus)
+    // printf("[Debug] mepc:%x %x\n", now.csr.mepc, next.csr.mepc)
+    // printf("[Debug] mcause:%x %x Mode:%x\n", now.csr.mcause, next.csr.mcause, priviledgeMode)
     // TODO: def raise an Interrupt
     // FIXME: 需要对中断做出处理 但是当前只针对异常进行处理
     val mstatusOld = WireInit(now.csr.mstatus.asTypeOf(new MstatusStruct))
