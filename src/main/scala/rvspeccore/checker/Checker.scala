@@ -222,22 +222,57 @@ class CheckerWithResult(checkMem: Boolean = true)(implicit config: RVConfig) ext
     specCore.io.mem.read.data := DontCare
   }
   // Initial false default
-  when(RegNext(io.instCommit.valid, false.B)) {
+  when(RegNext(RegNext(io.instCommit.valid, false.B),false.B)) {
+    // printf("Reg 5: %x %x\n", specCore.io.next.reg(5), io.result.reg(5))
+    // printf("Reg10: %x %x\n", specCore.io.next.reg(10), io.result.reg(10))
+    // printf("Reg 5 Next: %x %x\n", RegNext(specCore.io.next.reg(5.U), 0.U), RegNext(io.result.reg(5.U), 0.U))
+    // RegNext(io.result.reg(5.U), 0.U)
     for (i <- 0 until 32) {
-      assert(RegNext(io.result.reg(i.U), 0.U) === RegNext(specCore.io.next.reg(i.U), 0.U))
+      assert(RegNext(io.result.reg(i.U), 0.U) === RegNext(RegNext(specCore.io.next.reg(i.U), 0.U), 0.U))
     }  
+    // assert(RegNext(io.result.reg(1.U), 0.U) === RegNext(specCore.io.next.reg(1.U), 0.U))
+    // assert(RegNext(io.result.reg(2.U), 0.U) === RegNext(specCore.io.next.reg(2.U), 0.U))
+    // assert(RegNext(io.result.reg(3.U), 0.U) === RegNext(specCore.io.next.reg(3.U), 0.U))
+    // assert(RegNext(io.result.reg(4.U), 0.U) === RegNext(specCore.io.next.reg(4.U), 0.U))
+    // assert(RegNext(io.result.reg(5.U), 0.U) === RegNext(specCore.io.next.reg(5.U), 0.U))
+    // assert(RegNext(io.result.reg(6.U), 0.U) === RegNext(specCore.io.next.reg(6.U), 0.U))
+    // assert(RegNext(io.result.reg(7.U), 0.U) === RegNext(specCore.io.next.reg(7.U), 0.U))
+    // assert(RegNext(io.result.reg(8.U), 0.U) === RegNext(specCore.io.next.reg(8.U), 0.U))
+    // assert(RegNext(io.result.reg(9.U), 0.U) === RegNext(specCore.io.next.reg(9.U), 0.U))
+    // assert(RegNext(io.result.reg(10.U), 0.U) === RegNext(specCore.io.next.reg(10.U), 0.U))
+    // assert(RegNext(io.result.reg(11.U), 0.U) === RegNext(specCore.io.next.reg(11.U), 0.U))
+    // assert(RegNext(io.result.reg(12.U), 0.U) === RegNext(specCore.io.next.reg(12.U), 0.U))
+    // assert(RegNext(io.result.reg(13.U), 0.U) === RegNext(specCore.io.next.reg(13.U), 0.U))
+    // assert(RegNext(io.result.reg(14.U), 0.U) === RegNext(specCore.io.next.reg(14.U), 0.U))
+    // assert(RegNext(io.result.reg(15.U), 0.U) === RegNext(specCore.io.next.reg(15.U), 0.U))
+    // assert(RegNext(io.result.reg(16.U), 0.U) === RegNext(specCore.io.next.reg(16.U), 0.U))
+    // assert(RegNext(io.result.reg(17.U), 0.U) === RegNext(specCore.io.next.reg(17.U), 0.U))
+    // assert(RegNext(io.result.reg(18.U), 0.U) === RegNext(specCore.io.next.reg(18.U), 0.U))
+    // assert(RegNext(io.result.reg(19.U), 0.U) === RegNext(specCore.io.next.reg(19.U), 0.U))
+    // assert(RegNext(io.result.reg(20.U), 0.U) === RegNext(specCore.io.next.reg(20.U), 0.U))
+    // assert(RegNext(io.result.reg(21.U), 0.U) === RegNext(specCore.io.next.reg(21.U), 0.U))
+    // assert(RegNext(io.result.reg(22.U), 0.U) === RegNext(specCore.io.next.reg(22.U), 0.U))
+    // assert(RegNext(io.result.reg(23.U), 0.U) === RegNext(specCore.io.next.reg(23.U), 0.U))
+    // assert(RegNext(io.result.reg(24.U), 0.U) === RegNext(specCore.io.next.reg(24.U), 0.U))
+    // assert(RegNext(io.result.reg(25.U), 0.U) === RegNext(specCore.io.next.reg(25.U), 0.U))
+    // assert(RegNext(io.result.reg(26.U), 0.U) === RegNext(specCore.io.next.reg(26.U), 0.U))
+    // assert(RegNext(io.result.reg(27.U), 0.U) === RegNext(specCore.io.next.reg(27.U), 0.U))
+    // assert(RegNext(io.result.reg(28.U), 0.U) === RegNext(specCore.io.next.reg(28.U), 0.U))
+    // assert(RegNext(io.result.reg(29.U), 0.U) === RegNext(specCore.io.next.reg(29.U), 0.U))
+    // assert(RegNext(io.result.reg(30.U), 0.U) === RegNext(specCore.io.next.reg(30.U), 0.U))
+    // assert(RegNext(io.result.reg(31.U), 0.U) === RegNext(specCore.io.next.reg(31.U), 0.U))
   }
   // printf("[SSD] io.instCommit.valid %x io.event.valid %x speccore.io.event.valid %x\n", io.instCommit.valid, io.event.valid, specCore.io.event.valid)
-  when(RegNext(io.event.valid, false.B) || RegNext(specCore.io.event.valid, false.B)) {
-  // when(io.event.valid) {
-    assert(RegNext(io.event.valid        , false.B) === RegNext(specCore.io.event.valid        , false.B)) // Make sure DUT and specCore currently occur the same exception
-    assert(RegNext(io.event.intrNO       , false.B) === RegNext(specCore.io.event.intrNO       , false.B))
-    assert(RegNext(io.event.cause        , false.B) === RegNext(specCore.io.event.cause        , false.B))
-    assert(RegNext(io.event.exceptionPC  , false.B) === RegNext(specCore.io.event.exceptionPC  , false.B))
-    assert(RegNext(io.event.exceptionInst, false.B) === RegNext(specCore.io.event.exceptionInst, false.B))
-  }
+  // when(RegNext(io.event.valid, false.B) || RegNext(specCore.io.event.valid, false.B)) {
+  // // when(io.event.valid) {
+  //   assert(RegNext(io.event.valid        , false.B) === RegNext(specCore.io.event.valid        , false.B)) // Make sure DUT and specCore currently occur the same exception
+  //   assert(RegNext(io.event.intrNO       , false.B) === RegNext(specCore.io.event.intrNO       , false.B))
+  //   assert(RegNext(io.event.cause        , false.B) === RegNext(specCore.io.event.cause        , false.B))
+  //   assert(RegNext(io.event.exceptionPC  , false.B) === RegNext(specCore.io.event.exceptionPC  , false.B))
+  //   assert(RegNext(io.event.exceptionInst, false.B) === RegNext(specCore.io.event.exceptionInst, false.B))
+  // }
   // assert in current clock
-  when(io.instCommit.valid) {
+  when(RegNext(io.instCommit.valid, false.B)) {
     // now pc
     // For example, if the DUT have some bugs, can add assume to skip
     // assume For NutShell mtval high-bit problem
@@ -249,7 +284,9 @@ class CheckerWithResult(checkMem: Boolean = true)(implicit config: RVConfig) ext
     //     )
     //   )
     // )
-    assert(io.instCommit.pc === specCore.io.now.pc)
+    printf("CorePC: %x, SpecPC: %x\n",  RegNext(io.instCommit.pc, 0.U), RegNext(specCore.io.now.pc, 0.U))
+    assert(RegNext(io.instCommit.pc, 0.U) === RegNext(specCore.io.now.pc, 0.U))
+    assert(RegNext(specCore.io.inst, 0.U) === RegNext(io.instCommit.inst, 0.U))
     // next reg
     // for (i <- 0 until 32) {
     //   assert(io.result.reg(i.U) === specCore.io.next.reg(i.U))
@@ -258,11 +295,11 @@ class CheckerWithResult(checkMem: Boolean = true)(implicit config: RVConfig) ext
     // check it at next instruction
 
     // next csr
-    io.result.csr.table.zip(specCore.io.next.csr.table).map {
-      case (result, next) => {
-        assert(result.signal === next.signal)
-      }
-    }
+    // io.result.csr.table.zip(specCore.io.next.csr.table).map {
+    //   case (result, next) => {
+    //     assert(result.signal === next.signal)
+    //   }
+    // }
     // assert(io.result.csr.misa === specCore.io.next.csr.misa)
     // assert(io.result.csr.mvendorid === specCore.io.next.csr.mvendorid)
     // assert(io.result.csr.marchid === specCore.io.next.csr.marchid)

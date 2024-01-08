@@ -9,7 +9,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 
-lazy val root = (project in file("."))
+lazy val riscvSpecCore = (project in file("."))
   .settings(
     name := "RiscvSpecCore",
     libraryDependencies ++= Seq(
