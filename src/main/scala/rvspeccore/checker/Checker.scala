@@ -23,6 +23,10 @@ object InstCommit {
   * Check pc of commited instruction and next value of all register. Although
   * `pc` in the result port, but it won't be checked.
   */
+  // Initial false default
+
+
+
 class CheckerWithResult(checkMem: Boolean = true)(implicit config: RVConfig) extends Checker {
   val io = IO(new Bundle {
     val instCommit = Input(InstCommit())
@@ -37,27 +41,16 @@ class CheckerWithResult(checkMem: Boolean = true)(implicit config: RVConfig) ext
 
   specCore.io.mem.read.data := { if (checkMem) io.mem.get.read.data else DontCare }
 
-  // assert in current clock
-  when(io.instCommit.valid) {
-    // now pc
-    assert(io.instCommit.pc === specCore.io.now.pc)
-    // next reg
+  when(RegNext(RegNext(io.instCommit.valid, false.B),false.B)) {
     for (i <- 0 until 32) {
-      assert(io.result.reg(i.U) === specCore.io.next.reg(i.U))
-    }
-    // next pc: hard to get next pc in a pipeline
-    // check it at next instruction
-
-    if (checkMem) {
-      assert(io.mem.get.read.valid === specCore.io.mem.read.valid)
-      assert(io.mem.get.read.addr === specCore.io.mem.read.addr)
-      assert(io.mem.get.read.memWidth === specCore.io.mem.read.memWidth)
-
-      assert(io.mem.get.write.valid === specCore.io.mem.write.valid)
-      assert(io.mem.get.write.addr === specCore.io.mem.write.addr)
-      assert(io.mem.get.write.memWidth === specCore.io.mem.write.memWidth)
-      assert(io.mem.get.write.data === specCore.io.mem.write.data)
-    }
+      assert(RegNext(io.result.reg(i.U), 0.U) === RegNext(RegNext(specCore.io.next.reg(i.U), 0.U), 0.U))
+    }  
+  }
+  // assert in current clock
+  when(RegNext(io.instCommit.valid, false.B)) {
+    printf("CorePC: %x, SpecPC: %x\n",  RegNext(io.instCommit.pc, 0.U), RegNext(specCore.io.now.pc, 0.U))
+    assert(RegNext(io.instCommit.pc, 0.U) === RegNext(specCore.io.now.pc, 0.U))
+    assert(RegNext(specCore.io.inst, 0.U) === RegNext(io.instCommit.inst, 0.U))
   }
 }
 

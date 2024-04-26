@@ -37,7 +37,7 @@ class State()(implicit XLEN: Int) extends Bundle {
   val reg = Vec(32, UInt(XLEN.W))
   val pc  = UInt(XLEN.W)
 
-  def init(reg: UInt = 0.U(XLEN.W), pc: UInt = "h8000_0000".U(XLEN.W)): State = {
+  def init(reg: UInt = 0.U(XLEN.W), pc: UInt = "h0000_0200".U(XLEN.W)): State = {
     val state = Wire(this)
     state.reg := Seq.fill(32)(reg)
     state.pc  := pc
